@@ -1,7 +1,6 @@
 <?php
 
-namespace Grimarina\Blog;
-
+namespace Grimarina\Blog_Project\Blog;
 
 class Post 
 {
