@@ -1,0 +1,17 @@
+{
+    "name": "grimarina/blog",
+    "autoload": {
+        "psr-4": {
+            "Grimarina\\Blog\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Marina Grigoreva",
+            "email": "mgrigoreva12@gmail.com"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.20"
+    }
+}
