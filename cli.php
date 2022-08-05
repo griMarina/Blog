@@ -23,5 +23,5 @@ switch ($argv[1]) {
         break;
 
     default:
-        echo "Not found argument";
+        echo "The argument not found";
 }
