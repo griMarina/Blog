@@ -10,7 +10,11 @@ class Post
     private ?string $text;
 
 
-    public function __construct(int $id = null, int $id_user = null, string $title = null, string $text = null)
+    public function __construct(
+        int $id = null, 
+        int $id_user = null, 
+        string $title = null, 
+        string $text = null)
     {
         $this->id = $id;
         $this->id_user = $id_user;

@@ -10,7 +10,11 @@ class Comment
     private ?string $text;
 
 
-    public function __construct(int $id = null, int $id_user = null, int $id_post = null, string $text = null)
+    public function __construct(
+        int $id = null, 
+        int $id_user = null, 
+        int $id_post = null, 
+        string $text = null)
     {
         $this->id = $id;
         $this->id_user = $id_user;
