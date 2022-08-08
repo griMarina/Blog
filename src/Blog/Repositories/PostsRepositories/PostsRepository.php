@@ -39,7 +39,7 @@ class PostsRepository implements PostsRepositoryInterface
     public function getPost(\PDOStatement $statement, string $uuid): Post
     {
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        
+
         if ($result === false) {
             throw new PostNotFoundException(
                 "Cannot find post: $uuid"
