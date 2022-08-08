@@ -3,29 +3,30 @@
 require_once __DIR__ . "/vendor/autoload.php";
 
 use Grimarina\Blog_Project\Blog\{User, Post, Comment, UUID};
-use Grimarina\Blog_Project\Blog\Commands\Arguments;
-use Grimarina\Blog_Project\Blog\Commands\CreateUserCommand;
-use Grimarina\Blog_Project\Blog\Repositories\InMemoryUsersRepository;
-use Grimarina\Blog_Project\Blog\Repositories\UsersRepository;
+use Grimarina\Blog_Project\Blog\Commands\{Arguments, CreateUserCommand, CreatePostCommand};
+use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\{InMemoryUsersRepository, UsersRepository};
+use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
 
 
     $connection = new PDO('sqlite:' . __DIR__ . '/blog.sqlite');
 
-    //$faker = Faker\Factory::create();
+    $faker = Faker\Factory::create();
     
     //$usersRepository = new UsersRepository($connection);
+    $postsRepository = new PostsRepository($connection);
 
-    $usersRepository = new InMemoryUsersRepository();
     
-    $command = new CreateUserCommand($usersRepository);
+    //$command = new CreateUserCommand($usersRepository);
+    $command = new CreatePostCommand($postsRepository);
+
 
 try {
 
     $command->handle(Arguments::fromArgv($argv));
 
-    $user = $usersRepository->getByUsername('marina');
-    print($user);
-    
+
+    // Проверка Users
+
     // $usersRepository->save(new User(
     //     UUID::random(),
     //     'admin',
@@ -34,11 +35,31 @@ try {
     //     )
     // );
 
-    //echo $usersRepository->getByUsername('admin');
+
+    //$user = $usersRepository->getByUsername('marina');
+    //print($user);
+    
+    
+    // Проверка Posts
+
+    // $postsRepository->save(new Post(
+    //     UUID::random(),
+    //     '9127e521-7ac0-4357-b6c5-b1bcc01ba613',
+    //     $faker->title(), 
+    //     $faker->text(),
+    //     ));
+
+    //php cli.php author_uuid=9127e521-7ac0-4357-b6c5-b1bcc01ba613 title=first post text=Hello everyone!
+
+   // echo $postsRepository->get(New UUID('f440d768-3a0f-41fd-bafc-ed38c16252bc'));
+
+
+
     
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }
+
 
 
 

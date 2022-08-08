@@ -1,9 +1,8 @@
 <?php
 
-namespace Grimarina\Blog_Project\Blog\Repositories;
+namespace Grimarina\Blog_Project\Blog\Repositories\UsersRepositories;
 
-use Grimarina\Blog_Project\Blog\User;
-use Grimarina\Blog_Project\Blog\UUID;
+use Grimarina\Blog_Project\Blog\{User, UUID};
 
 interface UsersRepositoryInterface
 {

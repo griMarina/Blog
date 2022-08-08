@@ -21,17 +21,17 @@ class User
         return $this->uuid;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    public function getLastname()
+    public function getLastname(): string
     {                
         return $this->lastname;
     }

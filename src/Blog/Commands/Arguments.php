@@ -26,13 +26,20 @@ final class Arguments
         $arguments = [];
 
         foreach ($argv as $argument) {
+            //var_dump($argv);
             $parts = explode('=', $argument);
+            //var_dump($parts);
 
             if (count($parts) !== 2) {
                 continue;
             }
             $arguments[$parts[0]] = $parts[1];
         }
+
+        //print_r($arguments);
+
+
+        die;
 
         return new self($arguments);
     }
