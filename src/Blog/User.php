@@ -2,22 +2,43 @@
 
 namespace Grimarina\Blog_Project\Blog;
 
+use Grimarina\Blog_Project\Blog\UUID;
+
 class User 
 {
-    private ?int $id;
-    private ?string $firstname;
-    private ?string $lastname;
-
-
-    public function __construct(int $id = null, string $firstname = null, string $lastname = null)
+   
+    public function __construct(
+        private UUID $uuid,
+        private string $username,
+        private string $firstname, 
+        private string $lastname
+    ) 
     {
-        $this->id = $id;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
+    }
+
+    public function getUuid(): UUID
+    {
+        return $this->uuid;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function getLastname(): string
+    {                
+        return $this->lastname;
     }
 
     public function __toString(): string
     {
-        return $this->firstname . " " . $this->lastname . PHP_EOL;
+        return "User: " . $this->getFirstname() . " " . $this->getLastname() . PHP_EOL;
     }
+    
 }
