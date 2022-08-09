@@ -18,8 +18,8 @@ class CommentsRepository implements CommentsRepositoryInterface
 
         $statement->execute([
             ':uuid' => (string)$comment->getUuid(),
-            ':post_uuid' => $comment->getPost_uuid(),
-            ':author_uuid' => $comment->getAuthor_uuid(),
+            ':post_uuid' => (string)$comment->getPost_uuid(),
+            ':author_uuid' => (string)$comment->getAuthor_uuid(),
             ':text' => $comment->getText(), 
         ]);
     }
@@ -48,8 +48,8 @@ class CommentsRepository implements CommentsRepositoryInterface
 
         return new Comment(
             new UUID($result['uuid']),
-            $result['post_uuid'], 
-            $result['author_uuid'], 
+            new UUID($result['post_uuid']), 
+            new UUID($result['author_uuid']), 
             $result['text']
         );
     }

@@ -18,7 +18,7 @@ class PostsRepository implements PostsRepositoryInterface
 
         $statement->execute([
             ':uuid' => (string)$post->getUuid(),
-            ':author_uuid' => $post->getAuthor_uuid(),
+            ':author_uuid' => (string)$post->getAuthor_uuid(),
             ':title' => $post->getTitle(),
             ':text' => $post->getText(), 
         ]);
@@ -48,7 +48,7 @@ class PostsRepository implements PostsRepositoryInterface
 
         return new Post(
             new UUID($result['uuid']),
-            $result['author_uuid'], 
+            new UUID($result['author_uuid']), 
             $result['title'], 
             $result['text']
         );
