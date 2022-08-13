@@ -18,8 +18,8 @@ class CreateCommentCommand
     {
         $this->commentsRepository->save(new Comment(
             UUID::random(),
-            $arguments->get('post_uuid'),
-            $arguments->get('author_uuid'),
+            UUID::random(),
+            UUID::random(),
             $arguments->get('text')
         ));
     }

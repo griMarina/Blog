@@ -52,8 +52,8 @@ class UsersRepositoryTest extends TestCase
     
         $repository = new UsersRepository($connectionMock);
         $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('Cannot find user: Ivan');
+        $this->expectExceptionMessage('Cannot find user: ivan123');
 
-        $repository->getByUsername('Ivan');
+        $repository->getByUsername('ivan123');
     }
 }

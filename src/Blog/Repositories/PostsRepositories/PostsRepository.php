@@ -32,10 +32,9 @@ class PostsRepository implements PostsRepositoryInterface
             'uuid' => (string)$uuid,
         ]);
 
-       // return $this->getPost($statement, $uuid);
+        return $this->getPost($statement, $uuid);
 
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-       // var_dump($result);
 
         if ($result === false) {
             throw new PostNotFoundException(
@@ -52,22 +51,22 @@ class PostsRepository implements PostsRepositoryInterface
 
     }
 
-    // public function getPost(\PDOStatement $statement, string $uuid): Post
-    // {
-    //     $result = $statement->fetch(\PDO::FETCH_ASSOC);
-    //     var_dump($result);
+    public function getPost(\PDOStatement $statement, string $uuid): Post
+    {
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        var_dump($result);
 
-    //     if ($result === false) {
-    //         throw new PostNotFoundException(
-    //             "Cannot find post: $uuid"
-    //         ); 
-    //     }
+        if ($result === false) {
+            throw new PostNotFoundException(
+                "Cannot find post: $uuid"
+            ); 
+        }
 
-    //     return new Post(
-    //         new UUID($result['uuid']),
-    //         new UUID($result['author_uuid']), 
-    //         $result['title'], 
-    //         $result['text']
-    //     );
-    // }
+        return new Post(
+            new UUID($result['uuid']),
+            new UUID($result['author_uuid']), 
+            $result['title'], 
+            $result['text']
+        );
+    }
 }

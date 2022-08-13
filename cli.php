@@ -54,8 +54,7 @@ try {
 
     //php cli.php author_uuid=9127e521-7ac0-4357-b6c5-b1bcc01ba613 title=My_first_post text=Hello_everyone!_How_are_you?
 
-   $post = $postsRepository->get(New UUID('3e00843d-02e5-4837-bba5-a5eb9d33697d'));
-   var_dump($post);
+   echo $postsRepository->get(New UUID('3e00843d-02e5-4837-bba5-a5eb9d33697d'));
 
 
    // Проверка Comments
