@@ -2,7 +2,7 @@
 
 namespace Repositories;
 
-use Grimarina\Blog_Project\Blog\Exceptions\PostNotFoundException;
+use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\Post;

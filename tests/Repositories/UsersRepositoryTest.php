@@ -2,7 +2,7 @@
 
 namespace Repositories;
 
-use Grimarina\Blog_Project\Blog\Exceptions\UserNotFoundException;
+use Grimarina\Blog_Project\Exceptions\UserNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\User;
