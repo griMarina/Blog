@@ -2,7 +2,7 @@
 
 namespace Grimarina\Blog_Project\Blog\Commands;
 
-use Grimarina\Blog_Project\Blog\Exceptions\ArgumentsException;
+use Grimarina\Blog_Project\Exceptions\ArgumentsException;
 
 final class Arguments 
 {

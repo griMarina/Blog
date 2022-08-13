@@ -3,7 +3,7 @@
 namespace Grimarina\Blog_Project\Blog\Repositories\PostsRepositories;
 
 use Grimarina\Blog_Project\Blog\{Post, UUID};
-use Grimarina\Blog_Project\Blog\Exceptions\PostNotFoundException;
+use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
 
 class PostsRepository implements PostsRepositoryInterface
 {
@@ -54,7 +54,6 @@ class PostsRepository implements PostsRepositoryInterface
     public function getPost(\PDOStatement $statement, string $uuid): Post
     {
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        var_dump($result);
 
         if ($result === false) {
             throw new PostNotFoundException(

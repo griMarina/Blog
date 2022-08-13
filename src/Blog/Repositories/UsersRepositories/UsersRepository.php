@@ -3,7 +3,7 @@
 namespace Grimarina\Blog_Project\Blog\Repositories\UsersRepositories;
 
 use Grimarina\Blog_Project\Blog\{User, UUID};
-use Grimarina\Blog_Project\Blog\Exceptions\UserNotFoundException;
+use Grimarina\Blog_Project\Exceptions\UserNotFoundException;
 
 class UsersRepository implements UsersRepositoryInterface
 {
