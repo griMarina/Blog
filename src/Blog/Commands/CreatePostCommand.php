@@ -18,7 +18,7 @@ class CreatePostCommand
     {
         $this->postsRepository->save(new Post(
             UUID::random(),
-            $arguments->get('author_uuid'),
+            UUID::random(),
             $arguments->get('title'),
             $arguments->get('text')
         ));
