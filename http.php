@@ -6,7 +6,7 @@ use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
 use Grimarina\Blog_Project\Exceptions\HttpException;
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
-use Grimarina\Blog_Project\http\{ErrorResponse, Request, SuccessfulResponse};
+use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
 
 require_once __DIR__ . "/vendor/autoload.php";
