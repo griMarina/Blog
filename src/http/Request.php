@@ -25,7 +25,9 @@ class Request
         return $this->server['REQUEST_METHOD'];
     }
 
+
     public function jsonBody(): array{
+
         try {
             $data = json_decode(
                 $this->body,
@@ -39,13 +41,17 @@ class Request
         if (!is_array($data)) {
             throw new HttpException('Not an array/object in json body');
         }
+      
 
         return $data;
+        
     }
 
     public function jsonBodyField(string $field): mixed
     {
         $data = $this->jsonBody();
+
+        
 
         if (!array_key_exists($field, $data)) {
             throw new HttpException("No such field: $field");
@@ -53,6 +59,8 @@ class Request
         if (empty($data[$field])) {
             throw new HttpException("Empty field: $field");
         }
+
+        var_dump($data[$field]);
 
         return $data[$field];
     }
