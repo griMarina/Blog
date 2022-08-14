@@ -14,7 +14,7 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsReposi
     //$faker = Faker\Factory::create();
     
     //$usersRepository = new UsersRepository($connection);
-    $postsRepository = new PostsRepository($connection);
+    //$postsRepository = new PostsRepository($connection);
     //$commentsRepository = new CommentsRepository($connection);
 
 

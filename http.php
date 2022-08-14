@@ -3,11 +3,11 @@
 use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsRepository;
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
-use Grimarina\Blog_Project\Exceptions\HttpException;
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
-use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
+use Grimarina\Blog_Project\http\{ErrorResponse, Request};
+use Grimarina\Blog_Project\Exceptions\HttpException;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
@@ -78,8 +78,6 @@ $routes = [
             ),
         ]
     ];
-
-    
 
     if (!array_key_exists($path, $routes[$method])) {
         (new ErrorResponse('Not found'))->send();
