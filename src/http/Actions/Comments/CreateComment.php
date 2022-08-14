@@ -22,8 +22,6 @@ class CreateComment implements ActionInterface
 
     public function handle(Request $request): Response
     {
-       // var_dump($request);
-
         try {
             $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
         } catch (HttpException | InvalidArgumentException $error) { 

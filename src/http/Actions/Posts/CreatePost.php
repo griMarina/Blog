@@ -20,7 +20,6 @@ class CreatePost implements ActionInterface
 
     public function handle(Request $request): Response
     {
-
         try {
             $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
         } catch (HttpException | InvalidArgumentException $error) { 
