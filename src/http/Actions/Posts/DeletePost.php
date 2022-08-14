@@ -9,7 +9,7 @@ use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
 
 
-class FindByUuid implements ActionInterface
+class DeletePost implements ActionInterface
 {
     public function __construct(
         private PostsRepositoryInterface $postsRepository
@@ -26,16 +26,15 @@ class FindByUuid implements ActionInterface
         }
 
         try {
-            $post = $this->postsRepository->get(new UUID($postUuid));
+            
+            $this->postsRepository->delete(new UUID($postUuid));
 
         } catch (PostNotFoundException $error) {
             return new ErrorResponse($error->getMessage());
         }
 
         return new SuccessfulResponse([
-            'author_uuid' => (string)$post->getAuthor_uuid(),
-            'title' => $post->getTitle(),
-            'text' => $post->getText()
+            'uuid' => (string)$postUuid,
         ]);
     }
 }

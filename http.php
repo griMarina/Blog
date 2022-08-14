@@ -4,7 +4,7 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsReposi
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
 use Grimarina\Blog_Project\Exceptions\HttpException;
-use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, FindByUuid};
+use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, SuccessfulResponse};
 use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
@@ -43,7 +43,7 @@ $routes = [
                 new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
             )
         ),  
-    ],
+        ],
     'POST' => [
         '/users/create' => new CreateUser(
             new UsersRepository(
@@ -69,7 +69,14 @@ $routes = [
                 new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
             ),
         )    
-    ],
+        ],
+    'DELETE' => [
+        '/posts' => new DeletePost(
+            new PostsRepository(
+                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
+            )
+            ),
+        ]
     ];
 
     

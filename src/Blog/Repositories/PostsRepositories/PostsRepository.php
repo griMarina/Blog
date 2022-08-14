@@ -68,4 +68,13 @@ class PostsRepository implements PostsRepositoryInterface
             $result['text']
         );
     }
+
+    public function delete(UUID $uuid): void
+    {
+        $statement = $this->connection->prepare('DELETE FROM posts WHERE uuid = :uuid');
+
+        $statement->execute([
+            'uuid' => (string)$uuid,
+        ]);
+    }
 }

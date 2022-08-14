@@ -2,7 +2,7 @@
 
 namespace Grimarina\Blog_Project\Blog;
 
-use Grimarina\Blog_Project\Blog\Exceptions\InvalidArgumentException;
+use Grimarina\Blog_Project\Exceptions\InvalidArgumentException;
 
 class UUID
 {
