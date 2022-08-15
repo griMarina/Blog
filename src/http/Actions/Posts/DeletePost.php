@@ -26,12 +26,12 @@ class DeletePost implements ActionInterface
         }
 
         try {
-            
-            $this->postsRepository->delete(new UUID($postUuid));
-
+            $this->postsRepository->get(new UUID($postUuid));
         } catch (PostNotFoundException $error) {
             return new ErrorResponse($error->getMessage());
         }
+
+        $this->postsRepository->delete(new UUID($postUuid));
 
         return new SuccessfulResponse([
             'uuid' => (string)$postUuid,
