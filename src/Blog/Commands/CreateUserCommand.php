@@ -2,7 +2,7 @@
 
 namespace Grimarina\Blog_Project\Blog\Commands;
 
-use Grimarina\Blog_Project\Blog\Exceptions\{CommandException, UserNotFoundException};
+use Grimarina\Blog_Project\Exceptions\{CommandException, UserNotFoundException};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepositoryInterface;
 use Grimarina\Blog_Project\Blog\{User, UUID};
 use Grimarina\Blog_Project\Blog\Commands\Arguments;

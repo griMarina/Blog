@@ -3,7 +3,7 @@
 namespace Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories;
 
 use Grimarina\Blog_Project\Blog\{Comment, UUID};
-use Grimarina\Blog_Project\Blog\Exceptions\CommentNotFoundException;
+use Grimarina\Blog_Project\Exceptions\CommentNotFoundException;
 
 class CommentsRepository implements CommentsRepositoryInterface
 {

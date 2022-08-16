@@ -2,7 +2,7 @@
 
 namespace Repositories;
 
-use Grimarina\Blog_Project\Blog\Exceptions\CommentNotFoundException;
+use Grimarina\Blog_Project\Exceptions\CommentNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\Comment;

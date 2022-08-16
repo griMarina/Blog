@@ -14,7 +14,7 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsReposi
     //$faker = Faker\Factory::create();
     
     //$usersRepository = new UsersRepository($connection);
-    $postsRepository = new PostsRepository($connection);
+    //$postsRepository = new PostsRepository($connection);
     //$commentsRepository = new CommentsRepository($connection);
 
 
@@ -54,8 +54,9 @@ try {
 
     //php cli.php author_uuid=9127e521-7ac0-4357-b6c5-b1bcc01ba613 title=My_first_post text=Hello_everyone!_How_are_you?
 
-   echo $postsRepository->get(New UUID('3e00843d-02e5-4837-bba5-a5eb9d33697d'));
+   //echo $postsRepository->get(New UUID('3e00843d-02e5-4837-bba5-a5eb9d33697d'));
 
+   //$postsRepository->deletePost(new UUID('8bb92fbb-ae7f-4d77-8908-dc2e9ac047d8'));
 
    // Проверка Comments
 
