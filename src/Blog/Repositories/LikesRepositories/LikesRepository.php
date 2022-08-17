@@ -3,6 +3,7 @@
 namespace Grimarina\Blog_Project\Blog\Repositories\LikesRepositories;
 
 use Grimarina\Blog_Project\Blog\{Like, UUID};
+use Grimarina\Blog_Project\Exceptions\LikeAlreadyExistException;
 use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
 
 class LikesRepository implements LikesRepositoryInterface
@@ -14,57 +15,54 @@ class LikesRepository implements LikesRepositoryInterface
 
     public function save(Like $like): void
     {
+
+        $statement = $this->connection->prepare('SELECT author_uuid FROM likes WHERE post_uuid = :post_uuid');
+        $statement->execute([
+            ':post_uuid' => (string)$like->getPost_uuid(),
+        ]);
+
+        $arr = [];
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $arr[] = $row;
+        }
+
+        foreach ($arr as $row) {
+
+            if ($row['author_uuid'] == (string)$like->getAuthor_uuid()) {
+                throw new LikeAlreadyExistException(
+                    "Like has already added"
+                );
+            }
+        }
+
         $statement = $this->connection->prepare('INSERT INTO likes (uuid, post_uuid, author_uuid) VALUES (:uuid, :post_uuid, :author_uuid)');
 
         $statement->execute([
             ':uuid' => (string)$like->getUuid(),
             ':post_uuid' => (string)$like->getPost_uuid(),
             ':author_uuid' => (string)$like->getAuthor_uuid(),
-        ]);
+        ]);    
     }
 
-    public function getByPostUuid(UUID $post_uuid): Like
+    public function getByPostUuid(UUID $post_uuid): array 
     {
-        $statement = $this->connection->prepare('SELECT * FROM likes WHERE post_uuid = :post_uuid');
+        $statement = $this->connection->prepare('SELECT uuid FROM likes WHERE post_uuid = :post_uuid');
 
         $statement->execute([
             'post_uuid' => (string)$post_uuid,
         ]);
+ 
+        $likes = [];
+        while ($like = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $likes[] = $like;
+        }
         
-
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        
-        if ($result === false) {
+        if (empty($likes)) {
             throw new PostNotFoundException(
                 "Cannot find post: $post_uuid"
             ); 
         }
 
-        return new Like(
-            new UUID($result['uuid']),
-            new UUID($result['post_uuid']), 
-            new UUID($result['author_uuid']), 
-        );
+       return $likes;  
     }
-
-       // return $this->getLikes($statement, $post_uuid);
-
 }
-
-    // public function getLikes(\PDOStatement $statement, string $post_uuid): Like
-    // {
-    //     $result = $statement->fetch(\PDO::FETCH_ASSOC);
-        
-    //     if ($result === false) {
-    //         throw new LikeNotFoundException(
-    //             "Cannot find like: $uuid"
-    //         ); 
-    //     }
-
-    //     return new Comment(
-    //         new UUID($result['uuid']),
-    //         new UUID($result['post_uuid']), 
-    //         new UUID($result['author_uuid']), 
-    //         $result['text']
-    //     );
-    // }

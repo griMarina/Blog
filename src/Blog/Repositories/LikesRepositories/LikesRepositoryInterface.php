@@ -8,5 +8,5 @@ interface LikesRepositoryInterface
 {
     public function save(Like $like): void;
 
-    public function getByPostUuid(UUID $uuid): Like;
+    public function getByPostUuid(UUID $uuid): array;
 }
