@@ -1,15 +1,12 @@
 <?php
 
-use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsRepository;
-use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
-use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
 use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\Exceptions\HttpException;
 
-require_once __DIR__ . "/vendor/autoload.php";
+$container = require __DIR__ . '/bootstrap.php';
 
 $request = new Request(
     $_GET,
@@ -33,58 +30,27 @@ try {
 
 $routes = [
     'GET' => [
-        '/users/show' => new FindByUsername(
-            new UsersRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            )
-            ),
-        '/posts/show' => new FindByUuid(
-            new PostsRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            )
-        ),  
+        '/users/show' => FindByUsername::class,
+        '/posts/show' => FindByUuid::class 
         ],
     'POST' => [
-        '/users/create' => new CreateUser(
-            new UsersRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            )
-        ),
-        '/posts/create' => new CreatePost(
-            new PostsRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            ),
-            new UsersRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            ), 
-        ),
-        '/comments/create' => new CreateComment(
-            new CommentsRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            ),
-            new PostsRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            ), 
-            new UsersRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            ),
-        )    
+        '/users/create' => CreateUser::class,
+        '/posts/create' => CreatePost::class,
+        '/comments/create' => CreateComment::class 
         ],
     'DELETE' => [
-        '/posts' => new DeletePost(
-            new PostsRepository(
-                new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
-            )
-            ),
+        '/posts' => DeletePost::class
         ]
     ];
 
-    if (!array_key_exists($path, $routes[$method])) {
-        (new ErrorResponse('Not found'))->send();
+    if (!array_key_exists($method, $routes)) {
+        (new ErrorResponse("Route not found: $method $path"))->send();
         return;
     }
 
-    $action = $routes[$method][$path];
+    $actionClassName = $routes[$method][$path];
+
+    $action = $container->get($actionClassName);
 
 try {
     
