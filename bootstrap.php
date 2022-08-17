@@ -2,6 +2,7 @@
 
 use Grimarina\Blog_Project\Blog\Container\DIContainer;
 use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\{CommentsRepositoryInterface, CommentsRepository};
+use Grimarina\Blog_Project\Blog\Repositories\LikesRepositories\{LikesRepository, LikesRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\{PostsRepository, PostsRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\{UsersRepository, UsersRepositoryInterface};
 
@@ -27,6 +28,11 @@ $container->bind(
 $container->bind(
     CommentsRepositoryInterface::class,
     CommentsRepository::class
+);
+
+$container->bind(
+    LikesRepositoryInterface::class,
+    LikesRepository::class
 );
 
 return $container;

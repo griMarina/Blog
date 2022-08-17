@@ -3,6 +3,7 @@
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
 use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
+use Grimarina\Blog_Project\http\Actions\Likes\CreateLike;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\Exceptions\HttpException;
 
@@ -31,12 +32,14 @@ try {
 $routes = [
     'GET' => [
         '/users/show' => FindByUsername::class,
-        '/posts/show' => FindByUuid::class 
+        '/posts/show' => FindByUuid::class,
+        '/likes/show' => FindByUuid::class  
         ],
     'POST' => [
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePost::class,
-        '/comments/create' => CreateComment::class 
+        '/comments/create' => CreateComment::class,
+        '/likes/create' => CreateLike::class  
         ],
     'DELETE' => [
         '/posts' => DeletePost::class
