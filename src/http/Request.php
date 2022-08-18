@@ -56,9 +56,7 @@ class Request
         if (empty($data[$field])) {
             throw new HttpException("Empty field: $field");
         }
-
-        var_dump($data[$field]);
-
+        
         return $data[$field];
     }
 
