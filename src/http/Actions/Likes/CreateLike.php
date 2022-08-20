@@ -6,7 +6,7 @@ use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepositoryIn
 use Grimarina\Blog_Project\Blog\{Like, UUID};
 use Grimarina\Blog_Project\Blog\Repositories\LikesRepositories\LikesRepositoryInterface;
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepositoryInterface;
-use Grimarina\Blog_Project\Exceptions\{HttpException, InvalidArgumentException, UserNotFoundException, PostNotFoundException};
+use Grimarina\Blog_Project\Exceptions\{HttpException, InvalidArgumentException, LikeAlreadyExistsException, UserNotFoundException, PostNotFoundException};
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
 
@@ -41,6 +41,11 @@ class CreateLike implements ActionInterface
         try { 
             $this->usersRepository->get($authorUuid);
         } catch (UserNotFoundException $error) {
+            return new ErrorResponse($error->getMessage());
+        }
+        try { 
+            $this->likesRepository->isLikeAlreadyExists($postUuid, $authorUuid);
+        } catch (LikeAlreadyExistsException $error) {
             return new ErrorResponse($error->getMessage());
         }
 

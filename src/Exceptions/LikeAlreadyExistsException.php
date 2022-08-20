@@ -2,7 +2,7 @@
 
 namespace Grimarina\Blog_Project\Exceptions;
 
-class LikeAlreadyExistException extends \Exception
+class LikeAlreadyExistsException extends \Exception
 {
 
 }
