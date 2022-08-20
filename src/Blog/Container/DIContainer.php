@@ -28,12 +28,15 @@ class DIContainer implements ContainerInterface
 
     public function get(string $type): object
     {
+        
         if (array_key_exists($type, $this->resolvers)) {
             $typeToCreate = $this->resolvers[$type];
 
             if (is_object($typeToCreate)) {
                 return $typeToCreate;
             }
+
+            var_dump($this->get($typeToCreate));
 
             return $this->get($typeToCreate);
         }

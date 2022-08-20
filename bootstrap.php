@@ -5,14 +5,51 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\{CommentsRepos
 use Grimarina\Blog_Project\Blog\Repositories\LikesRepositories\{LikesRepository, LikesRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\{PostsRepository, PostsRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\{UsersRepository, UsersRepositoryInterface};
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Dotenv\Dotenv;
 
 require_once __DIR__ . "/vendor/autoload.php";
+
+Dotenv::createImmutable(__DIR__)->safeLoad();
 
 $container = new DIContainer();
 
 $container->bind(
     PDO::class,
-    new PDO('sqlite:' . __DIR__ . '/blog.sqlite')
+    new PDO('sqlite:' . __DIR__ . '/' . $_SERVER['SQLITE_DB_PATH'])
+);
+
+$logger = (new Logger('blog'));
+
+if ('yes' === $_SERVER['LOG_TO_FILES']) {
+    $logger
+        ->pushHandler(
+            new StreamHandler(__DIR__ . '/logs/blog.log'))
+        ->pushHandler(
+            new StreamHandler(__DIR__ . '/logs/blog.error.log', 
+            level: Logger::ERROR,
+            bubble: false,
+        )
+    );
+}
+
+if ('yes' === $_SERVER['LOG_TO_CONSOLE']) {
+    $logger
+        ->pushHandler(
+            new StreamHandler('php://stdout')
+        );
+}
+
+$container->bind(
+    IdentificationInterface::class,
+    JsonBodyUuidIdentification::class
+);
+
+$container->bind(
+    LoggerInterface::class,
+    $logger
 );
 
 $container->bind(
