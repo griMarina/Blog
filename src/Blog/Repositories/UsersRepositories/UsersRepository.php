@@ -7,9 +7,10 @@ use Grimarina\Blog_Project\Exceptions\UserNotFoundException;
 
 class UsersRepository implements UsersRepositoryInterface
 {
-    public function __construct(\PDO $connection)
+    public function __construct(
+       private \PDO $connection,
+    )
     {
-        $this->connection = $connection;
     }
 
     public function save(User $user): void

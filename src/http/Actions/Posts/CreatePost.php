@@ -41,7 +41,7 @@ class CreatePost implements ActionInterface
 
         $this->postsRepository->save($post);
 
-        $this->logger->info("Post created $newPostUuid");
+        $this->logger->info("Post $newPostUuid created");
 
         return new SuccessfulResponse([
             'uuid' => (string)$newPostUuid,

@@ -9,6 +9,7 @@ use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepositoryIn
 use Grimarina\Blog_Project\Exceptions\{HttpException, InvalidArgumentException, LikeAlreadyExistsException, UserNotFoundException, PostNotFoundException};
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
+use Psr\Log\LoggerInterface;
 
 class CreateLike implements ActionInterface 
 {
@@ -16,6 +17,7 @@ class CreateLike implements ActionInterface
         private LikesRepositoryInterface $likesRepository,
         private PostsRepositoryInterface $postsRepository,
         private UsersRepositoryInterface $usersRepository,
+        private LoggerInterface $logger
     )
     {
     }
@@ -65,6 +67,8 @@ class CreateLike implements ActionInterface
 
         $this->likesRepository->save($like);
 
+        $this->logger->info("Like $newLikeUuid created");
+        
         return new SuccessfulResponse([
             'uuid' => (string)$newLikeUuid,
         ]);

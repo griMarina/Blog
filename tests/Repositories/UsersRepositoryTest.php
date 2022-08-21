@@ -6,13 +6,13 @@ use Grimarina\Blog_Project\Exceptions\UserNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\User;
+use Grimarina\Blog_Project\UnitTests\DummyLogger;
 use PDO;
 use PDOStatement;
 use PHPUnit\Framework\TestCase;
 
 class UsersRepositoryTest extends TestCase 
 {
-
     public function testItSavesUserToDatabase(): void
     {
         $connectionStub = $this->createStub(PDO::class);
