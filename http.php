@@ -64,6 +64,7 @@ $routes = [
 try {
     $action = $container->get($actionClassName);
     $response = $action->handle($request);
+
 } catch (Exception $exception) {
     $logger->error($exception->getMessage(), ['exception' => $exception]);
     (new ErrorResponse())->send();

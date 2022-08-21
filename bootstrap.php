@@ -5,6 +5,7 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\{CommentsRepos
 use Grimarina\Blog_Project\Blog\Repositories\LikesRepositories\{LikesRepository, LikesRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\{PostsRepository, PostsRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\{UsersRepository, UsersRepositoryInterface};
+use Grimarina\Blog_Project\http\Auth\{IdentificationInterface, JsonBodyUuidIdentification};
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -43,11 +44,6 @@ if ('yes' === $_SERVER['LOG_TO_CONSOLE']) {
 }
 
 $container->bind(
-    IdentificationInterface::class,
-    JsonBodyUuidIdentification::class
-);
-
-$container->bind(
     LoggerInterface::class,
     $logger
 );
@@ -70,6 +66,11 @@ $container->bind(
 $container->bind(
     LikesRepositoryInterface::class,
     LikesRepository::class
+);
+
+$container->bind(
+    IdentificationInterface::class,
+    JsonBodyUuidIdentification::class
 );
 
 return $container;
