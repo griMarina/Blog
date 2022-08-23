@@ -8,11 +8,10 @@ use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
 
-
 class FindByPostUuid implements ActionInterface
 {
     public function __construct(
-        private LikesRepositoryInterface $likesRepository
+        private LikesRepositoryInterface $likesRepository,        
     )
     {
     }
@@ -29,7 +28,7 @@ class FindByPostUuid implements ActionInterface
             $likes = $this->likesRepository->getByPostUuid(new UUID($postUuid));
 
         } catch (PostNotFoundException $error) {
-            return new ErrorResponse($error->getMessage());
+            return new ErrorResponse($error->getMessage());          
         }
 
         return new SuccessfulResponse($likes);

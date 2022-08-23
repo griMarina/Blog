@@ -2,11 +2,11 @@
 
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
-use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
-use Grimarina\Blog_Project\http\Actions\Likes\CreateLike;
+use Grimarina\Blog_Project\http\Actions\Comments\{CreateComment, FindCommentByUuid};
+use Grimarina\Blog_Project\http\Actions\Likes\{CreateLike, FindByPostUuid};
 use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\Exceptions\HttpException;
-use Grimarina\Blog_Project\http\Actions\Likes\FindByPostUuid;
+use Psr\Log\LoggerInterface;
 
 $container = require __DIR__ . '/bootstrap.php';
 
@@ -16,16 +16,20 @@ $request = new Request(
     file_get_contents('php://input')
 );
 
+$logger = $container->get(LoggerInterface::class);
+
 try {
     $path = $request->path();
-} catch (HttpException) {
+} catch (HttpException $exception) {
+    $logger->warning($exception->getMessage());
     (new ErrorResponse())->send();
     return;
 }
 
 try {
     $method = $request->method();
-} catch (HttpException) {
+} catch (HttpException $exception) {
+    $logger->warning($exception->getMessage());
     (new ErrorResponse())->send();
     return;
 }
@@ -34,7 +38,8 @@ $routes = [
     'GET' => [
         '/users/show' => FindByUsername::class,
         '/posts/show' => FindByUuid::class,
-        '/likes/show' => FindByPostUuid::class  
+        '/comments/show' => FindCommentByUuid::class,    
+        '/likes/show' => FindByPostUuid::class,
         ],
     'POST' => [
         '/users/create' => CreateUser::class,
@@ -47,23 +52,23 @@ $routes = [
         ]
     ];
 
-    if (!array_key_exists($method, $routes)) {
-        (new ErrorResponse("Route not found: $method $path"))->send();
+    if (!array_key_exists($method, $routes) || !array_key_exists($path, $routes[$method])) {
+        $message = "Route not found: $method $path";
+        $logger->notice($message);
+        (new ErrorResponse($message))->send();
         return;
     }
 
     $actionClassName = $routes[$method][$path];
 
-    $action = $container->get($actionClassName);
-
 try {
-    
+    $action = $container->get($actionClassName);
     $response = $action->handle($request);
 
-    $response->send();
-
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    $logger->error($exception->getMessage(), ['exception' => $exception]);
+    (new ErrorResponse())->send();
+    return;
 }
 
-
+$response->send();

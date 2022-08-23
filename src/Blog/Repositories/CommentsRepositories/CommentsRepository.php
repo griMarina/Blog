@@ -4,12 +4,15 @@ namespace Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories;
 
 use Grimarina\Blog_Project\Blog\{Comment, UUID};
 use Grimarina\Blog_Project\Exceptions\CommentNotFoundException;
+use Psr\Log\LoggerInterface;
 
 class CommentsRepository implements CommentsRepositoryInterface
 {
-    public function __construct(\PDO $connection)
+    public function __construct(
+        private \PDO $connection,
+        private LoggerInterface $logger
+    )
     {
-        $this->connection = $connection;
     }
 
     public function save(Comment $comment): void
@@ -22,6 +25,9 @@ class CommentsRepository implements CommentsRepositoryInterface
             ':author_uuid' => (string)$comment->getAuthor_uuid(),
             ':text' => $comment->getText(), 
         ]);
+
+        $this->logger->info('Comment ' . $comment->getUuid() . ' created');
+
     }
 
     public function get(UUID $uuid): Comment
@@ -41,9 +47,10 @@ class CommentsRepository implements CommentsRepositoryInterface
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         
         if ($result === false) {
-            throw new CommentNotFoundException(
-                "Cannot find comment: $uuid"
-            ); 
+            $message = "Cannot find comment: $uuid";
+            $this->logger->warning($message);
+
+            throw new CommentNotFoundException($message); 
         }
 
         return new Comment(

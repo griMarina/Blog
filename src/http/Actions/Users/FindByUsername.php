@@ -10,7 +10,7 @@ use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulRes
 class FindByUsername implements ActionInterface
 {
     public function __construct(
-        private UsersRepositoryInterface $usersRepository
+        private UsersRepositoryInterface $usersRepository,
     )
     {
     }
@@ -25,7 +25,6 @@ class FindByUsername implements ActionInterface
 
         try {
             $user = $this->usersRepository->getByUsername($username);
-
         } catch (UserNotFoundException $error) {
             return new ErrorResponse($error->getMessage());
         }

@@ -10,6 +10,7 @@ use Grimarina\Blog_Project\http\Actions\Users\FindByUsername;
 use Grimarina\Blog_Project\http\ErrorResponse;
 use Grimarina\Blog_Project\http\Request;
 use Grimarina\Blog_Project\http\SuccessfulResponse;
+use Grimarina\Blog_Project\UnitTests\DummyLogger;
 use PHPUnit\Framework\TestCase;
 
 class FindByUsernameActionTest extends TestCase 
@@ -26,7 +27,7 @@ class FindByUsernameActionTest extends TestCase
 
         $usersRepository = $this->usersRepository([]);
 
-        $action = new FindByUsername($usersRepository);
+        $action = new FindByUsername($usersRepository, new DummyLogger());
 
         $response = $action->handle($request);
 
@@ -48,7 +49,7 @@ class FindByUsernameActionTest extends TestCase
 
         $usersRepository = $this->usersRepository([]);
 
-        $action = new FindByUsername($usersRepository);
+        $action = new FindByUsername($usersRepository, new DummyLogger());
 
         $response = $action->handle($request);
 
@@ -77,7 +78,7 @@ class FindByUsernameActionTest extends TestCase
             ),
         ]);
 
-        $action = new FindByUsername($usersRepository);
+        $action = new FindByUsername($usersRepository, new DummyLogger());
 
         $response = $action->handle($request);
 

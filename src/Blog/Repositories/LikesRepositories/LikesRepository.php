@@ -4,12 +4,15 @@ namespace Grimarina\Blog_Project\Blog\Repositories\LikesRepositories;
 
 use Grimarina\Blog_Project\Blog\{Like, UUID};
 use Grimarina\Blog_Project\Exceptions\{LikeAlreadyExistsException, PostNotFoundException};
+use Psr\Log\LoggerInterface;
 
 class LikesRepository implements LikesRepositoryInterface
 {
-    public function __construct(\PDO $connection)
+    public function __construct(
+        private \PDO $connection,
+        private LoggerInterface $logger,
+    )
     {
-        $this->connection = $connection;
     }
 
     public function save(Like $like): void
@@ -20,7 +23,10 @@ class LikesRepository implements LikesRepositoryInterface
             ':uuid' => (string)$like->getUuid(),
             ':post_uuid' => (string)$like->getPost_uuid(),
             ':author_uuid' => (string)$like->getAuthor_uuid(),
-        ]);    
+        ]);
+        
+        $this->logger->info('Like ' . $like->getUuid() . ' created');
+
     }
 
     public function getByPostUuid(UUID $post_uuid): array 
@@ -34,9 +40,10 @@ class LikesRepository implements LikesRepositoryInterface
         $result = $statement->fetchAll();
         
         if (!$result) {
-            throw new PostNotFoundException(
-                "Cannot find post: $post_uuid"
-            ); 
+            $message = "Cannot find post: $post_uuid";
+            $this->logger->warning($message);
+
+            throw new PostNotFoundException($message); 
         }
 
        return $result;  
@@ -53,9 +60,10 @@ class LikesRepository implements LikesRepositoryInterface
         $result = $statement->fetchAll();
         
         if ($result) {
-            throw new LikeAlreadyExistsException(
-                "Like has already added"
-            );
+            $message = "Like has already added to post $post_uuid";
+            $this->logger->info($message);
+
+            throw new LikeAlreadyExistsException($message);
         }        
     }
 }

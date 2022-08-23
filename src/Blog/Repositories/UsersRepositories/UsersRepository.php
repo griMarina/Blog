@@ -4,12 +4,15 @@ namespace Grimarina\Blog_Project\Blog\Repositories\UsersRepositories;
 
 use Grimarina\Blog_Project\Blog\{User, UUID};
 use Grimarina\Blog_Project\Exceptions\UserNotFoundException;
+use Psr\Log\LoggerInterface;
 
 class UsersRepository implements UsersRepositoryInterface
 {
-    public function __construct(\PDO $connection)
+    public function __construct(
+       private \PDO $connection,
+       private LoggerInterface $logger,
+    )
     {
-        $this->connection = $connection;
     }
 
     public function save(User $user): void
@@ -22,6 +25,8 @@ class UsersRepository implements UsersRepositoryInterface
             ':firstname' => $user->getFirstname(),
             ':lastname' => $user->getLastname(), 
         ]);
+
+        $this->logger->info('User ' . $user->getUsername() . ' created');
     }
 
     public function get(UUID $uuid): User
@@ -52,9 +57,10 @@ class UsersRepository implements UsersRepositoryInterface
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         
         if ($result === false) {
-            throw new UserNotFoundException(
-                "Cannot find user: $username"
-            ); 
+            $message = "Cannot find user: $username";
+            $this->logger->warning($message);
+            
+            throw new UserNotFoundException($message); 
         }
 
         return new User(

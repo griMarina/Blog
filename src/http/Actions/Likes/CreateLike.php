@@ -64,7 +64,7 @@ class CreateLike implements ActionInterface
         }
 
         $this->likesRepository->save($like);
-
+                
         return new SuccessfulResponse([
             'uuid' => (string)$newLikeUuid,
         ]);
