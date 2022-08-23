@@ -7,13 +7,11 @@ use Grimarina\Blog_Project\Exceptions\{HttpException, PostNotFoundException};
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
-use Psr\Log\LoggerInterface;
 
 class FindByPostUuid implements ActionInterface
 {
     public function __construct(
         private LikesRepositoryInterface $likesRepository,        
-        private LoggerInterface $logger, 
     )
     {
     }
@@ -30,7 +28,6 @@ class FindByPostUuid implements ActionInterface
             $likes = $this->likesRepository->getByPostUuid(new UUID($postUuid));
 
         } catch (PostNotFoundException $error) {
-            $this->logger->warning($error->getMessage()); 
             return new ErrorResponse($error->getMessage());          
         }
 

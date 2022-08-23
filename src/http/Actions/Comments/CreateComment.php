@@ -17,7 +17,6 @@ class CreateComment implements ActionInterface
         private CommentsRepositoryInterface $commentsRepository,
         private PostsRepositoryInterface $postsRepository,
         private UsersRepositoryInterface $usersRepository,
-        private LoggerInterface $logger
     )
     {
     }
@@ -62,8 +61,6 @@ class CreateComment implements ActionInterface
         }
 
         $this->commentsRepository->save($comment);
-
-        $this->logger->info("Comment $newCommentUuid created");
 
         return new SuccessfulResponse([
             'uuid' => (string)$newCommentUuid,

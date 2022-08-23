@@ -4,12 +4,15 @@ namespace Grimarina\Blog_Project\Blog\Repositories\PostsRepositories;
 
 use Grimarina\Blog_Project\Blog\{Post, UUID};
 use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
+use Psr\Log\LoggerInterface;
 
 class PostsRepository implements PostsRepositoryInterface
 {
-    public function __construct(\PDO $connection)
+    public function __construct(
+        private \PDO $connection,
+        private LoggerInterface $logger,
+        )
     {
-        $this->connection = $connection;
     }
 
     public function save(Post $post): void
@@ -22,6 +25,8 @@ class PostsRepository implements PostsRepositoryInterface
             ':title' => $post->getTitle(),
             ':text' => $post->getText(), 
         ]);
+
+        $this->logger->info('Post ' . $post->getUuid() . ' created');
     }
 
     public function get(UUID $uuid): Post
@@ -34,21 +39,6 @@ class PostsRepository implements PostsRepositoryInterface
 
         return $this->getPost($statement, $uuid);
 
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        if ($result === false) {
-            throw new PostNotFoundException(
-                "Cannot find post: $uuid"
-            ); 
-        }
-
-        return new Post(
-            new UUID($result['uuid']),
-            new UUID($result['author_uuid']), 
-            $result['title'], 
-            $result['text']
-        );
-
     }
 
     public function getPost(\PDOStatement $statement, string $uuid): Post
@@ -56,9 +46,10 @@ class PostsRepository implements PostsRepositoryInterface
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         if ($result === false) {
-            throw new PostNotFoundException(
-                "Cannot find post: $uuid"
-            ); 
+            $message = "Cannot find post: $uuid";
+            $this->logger->warning($message);
+            
+            throw new PostNotFoundException($message); 
         }
 
         return new Post(

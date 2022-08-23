@@ -2,11 +2,10 @@
 
 use Grimarina\Blog_Project\http\Actions\Posts\{CreatePost, DeletePost, FindByUuid};
 use Grimarina\Blog_Project\http\Actions\Users\{CreateUser, FindByUsername};
-use Grimarina\Blog_Project\http\Actions\Comments\CreateComment;
-use Grimarina\Blog_Project\http\Actions\Likes\CreateLike;
+use Grimarina\Blog_Project\http\Actions\Comments\{CreateComment, FindCommentByUuid};
+use Grimarina\Blog_Project\http\Actions\Likes\{CreateLike, FindByPostUuid};
 use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\Exceptions\HttpException;
-use Grimarina\Blog_Project\http\Actions\Likes\FindByPostUuid;
 use Psr\Log\LoggerInterface;
 
 $container = require __DIR__ . '/bootstrap.php';
@@ -39,7 +38,8 @@ $routes = [
     'GET' => [
         '/users/show' => FindByUsername::class,
         '/posts/show' => FindByUuid::class,
-        '/likes/show' => FindByPostUuid::class  
+        '/comments/show' => FindCommentByUuid::class,    
+        '/likes/show' => FindByPostUuid::class,
         ],
     'POST' => [
         '/users/create' => CreateUser::class,

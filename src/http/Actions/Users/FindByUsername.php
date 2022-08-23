@@ -6,13 +6,11 @@ use Grimarina\Blog_Project\Exceptions\{UserNotFoundException, HttpException};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepositoryInterface;
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
-use Psr\Log\LoggerInterface;
 
 class FindByUsername implements ActionInterface
 {
     public function __construct(
         private UsersRepositoryInterface $usersRepository,
-        private LoggerInterface $logger
     )
     {
     }
@@ -28,7 +26,6 @@ class FindByUsername implements ActionInterface
         try {
             $user = $this->usersRepository->getByUsername($username);
         } catch (UserNotFoundException $error) {
-            $this->logger->warning($error->getMessage()); 
             return new ErrorResponse($error->getMessage());
         }
 
