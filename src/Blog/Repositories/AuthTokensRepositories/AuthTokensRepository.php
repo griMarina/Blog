@@ -8,7 +8,6 @@ use Exception;
 use Grimarina\Blog_Project\Blog\{AuthToken, UUID};
 use Grimarina\Blog_Project\Blog\Repositories\AuthTokensRepositories\AuthTokensRepositoryInterface;
 use Grimarina\Blog_Project\Exceptions\{AuthTokenNotFoundException, AuthTokensRepositoryException};
-use PDO;
 
 class AuthTokensRepository implements AuthTokensRepositoryInterface
 {
