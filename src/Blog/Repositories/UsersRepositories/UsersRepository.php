@@ -17,11 +17,13 @@ class UsersRepository implements UsersRepositoryInterface
 
     public function save(User $user): void
     {
-        $statement = $this->connection->prepare('INSERT INTO users (uuid, username, firstname, lastname) VALUES (:uuid, :username, :firstname, :lastname)');
+
+        $statement = $this->connection->prepare('INSERT INTO users (uuid, username, password, firstname, lastname) VALUES (:uuid, :username, :password, :firstname, :lastname)');
 
         $statement->execute([
             ':uuid' => (string)$user->getUuid(),
             ':username' => $user->getUsername(),
+            ':password' => $user->getHashedPassword(),
             ':firstname' => $user->getFirstname(),
             ':lastname' => $user->getLastname(), 
         ]);
@@ -66,6 +68,7 @@ class UsersRepository implements UsersRepositoryInterface
         return new User(
             new UUID($result['uuid']),
             $result['username'], 
+            $result['password'], 
             $result['firstname'], 
             $result['lastname']
         );

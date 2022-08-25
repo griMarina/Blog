@@ -6,6 +6,7 @@ use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\Post;
+use Grimarina\Blog_Project\UnitTests\DummyLogger;
 use PDO;
 use PDOStatement;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +31,7 @@ class PostsRepositoryTest extends TestCase
 
         $connectionStub->method('prepare')->willReturn($statementMock);
 
-        $repository = new PostsRepository($connectionStub);
+        $repository = new PostsRepository($connectionStub, new DummyLogger());
 
         $repository->save(new Post(
             new UUID('f440d768-3a0f-41fd-bafc-ed38c16252bc'),
@@ -88,7 +89,7 @@ class PostsRepositoryTest extends TestCase
         $statementStub->method('fetch')->willReturn(false);
         $connectionMock->method('prepare')->willReturn($statementStub);
 
-        $repository = new PostsRepository($connectionMock);
+        $repository = new PostsRepository($connectionMock, new DummyLogger());
         $this->expectException(PostNotFoundException::class);
         $this->expectExceptionMessage('Cannot find post: f440d768-3a0f-41fd-bafc-ed38c16252bc');
 

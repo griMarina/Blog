@@ -5,7 +5,8 @@ use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\{CommentsRepos
 use Grimarina\Blog_Project\Blog\Repositories\LikesRepositories\{LikesRepository, LikesRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\{PostsRepository, PostsRepositoryInterface};
 use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\{UsersRepository, UsersRepositoryInterface};
-use Grimarina\Blog_Project\http\Auth\{IdentificationInterface, JsonBodyUuidIdentification};
+use Grimarina\Blog_Project\Blog\Repositories\AuthTokensRepositories\{AuthTokensRepositoryInterface, AuthTokensRepository};
+use Grimarina\Blog_Project\http\Auth\{AuthenticationInterface, BearerTokenAuthentication, IdentificationInterface, JsonBodyUuidIdentification, PasswordAuthentication, PasswordAuthenticationInterface, TokenAuthenticationInterface};
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -71,6 +72,26 @@ $container->bind(
 $container->bind(
     IdentificationInterface::class,
     JsonBodyUuidIdentification::class
+);
+
+$container->bind(
+    AuthenticationInterface::class,
+    PasswordAuthentication::class
+);
+
+$container->bind(
+    PasswordAuthenticationInterface::class,
+    PasswordAuthentication::class
+);
+
+$container->bind(
+    AuthTokensRepositoryInterface::class,
+    AuthTokensRepository::class
+);
+
+$container->bind( 
+    TokenAuthenticationInterface::class, 
+    BearerTokenAuthentication::class
 );
 
 return $container;
