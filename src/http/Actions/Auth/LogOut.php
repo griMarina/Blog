@@ -5,38 +5,46 @@ namespace Grimarina\Blog_Project\http\Actions\Auth;
 use DateTimeImmutable;
 use Grimarina\Blog_Project\Blog\AuthToken;
 use Grimarina\Blog_Project\Blog\Repositories\AuthTokensRepositories\AuthTokensRepositoryInterface;
-use Grimarina\Blog_Project\Exceptions\AuthException;
+use Grimarina\Blog_Project\Exceptions\{AuthException, AuthTokenNotFoundException, HttpException};
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
-use Grimarina\Blog_Project\http\Auth\PasswordAuthenticationInterface;
-use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
+use Grimarina\Blog_Project\http\{Request, Response, SuccessfulResponse};
 
 class LogOut implements ActionInterface
 {
+    private const HEADER_PREFIX = 'Bearer ';
+
     public function __construct(
-        private PasswordAuthenticationInterface  $passwordAuthentication,
         private AuthTokensRepositoryInterface $authTokensRepository,
     )
-    {
+    {   
     }
-
+    
     public function handle(Request $request): Response
     {
         try {
-            $user = $this->passwordAuthentication->user($request);
-        } catch (AuthException $error) {
-            return new ErrorResponse($error->getMessage());
+                $header = $request->header('Authorization');
+        } catch (HttpException $error) {
+                throw new AuthException($error->getMessage());
         }
+            
+        $token = mb_substr($header, strlen(self::HEADER_PREFIX));
+          
+        try {
+                $oldToken = $this->authTokensRepository->get($token);
+        } catch (AuthTokenNotFoundException) {
+                throw new AuthException("Bad token: [$token]");
+        }   
 
-        $authToken = new AuthToken(
-            bin2hex(random_bytes(40)),
-            $user->getUuid(),
-            (new DateTimeImmutable())->modify('+ 1 sec')
+        $newToken = new AuthToken(
+            $oldToken->token(),
+            $oldToken->userUuid(),            
+            new DateTimeImmutable("now"),      
         );
 
-        $this->authTokensRepository->save($authToken);
+       $this->authTokensRepository->save($newToken);
 
-        return new SuccessfulResponse([
-            'token' => $authToken->token(),
-        ]);
+       return new SuccessfulResponse([
+            'token' => $newToken->token(),
+        ]); 
     }
 }

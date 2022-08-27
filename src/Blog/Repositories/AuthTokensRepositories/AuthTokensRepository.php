@@ -55,7 +55,7 @@ class AuthTokensRepository implements AuthTokensRepositoryInterface
                 ':token' => $token,
             ]);
 
-            $result = $statement->fetch(PDO::FETCH_ASSOC);
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         } catch (\PDOException $error) {
             throw new AuthTokensRepositoryException(
