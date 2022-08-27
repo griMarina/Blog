@@ -5,33 +5,28 @@ namespace Grimarina\Blog_Project\http\Actions\Comments;
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepositoryInterface;
 use Grimarina\Blog_Project\Blog\{Comment, UUID};
 use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsRepositoryInterface;
-use Grimarina\Blog_Project\Blog\Repositories\UsersRepositories\UsersRepositoryInterface;
-use Grimarina\Blog_Project\Exceptions\{HttpException, InvalidArgumentException, PostNotFoundException, UserNotFoundException};
+use Grimarina\Blog_Project\Exceptions\{AuthException, HttpException, InvalidArgumentException, PostNotFoundException};
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
-use Psr\Log\LoggerInterface;
+use Grimarina\Blog_Project\http\Auth\TokenAuthenticationInterface;
 
 class CreateComment implements ActionInterface 
 {
     public function __construct(
         private CommentsRepositoryInterface $commentsRepository,
         private PostsRepositoryInterface $postsRepository,
-        private UsersRepositoryInterface $usersRepository,
+        private TokenAuthenticationInterface $authentication,
     )
     {
     }
 
     public function handle(Request $request): Response
     {
+
         try {
-            $authorUuid = new UUID($request->jsonBodyField('author_uuid'));
-        } catch (HttpException | InvalidArgumentException $error) { 
-            return new ErrorResponse($error->getMessage());
-        }
-        try { 
-            $this->usersRepository->get($authorUuid);
-        } catch (UserNotFoundException $error) {
-            return new ErrorResponse($error->getMessage());
+            $author = $this->authentication->user($request); 
+        } catch (AuthException $error) {
+            return new ErrorResponse($error->getMessage()); 
         }
 
         try {
@@ -51,7 +46,7 @@ class CreateComment implements ActionInterface
             $comment = new Comment(
                 $newCommentUuid,
                 $postUuid,
-                $authorUuid,
+                $author->getUuid(),
                 $request->jsonBodyField('text')
             );
 

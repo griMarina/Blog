@@ -6,6 +6,7 @@ use Grimarina\Blog_Project\Exceptions\CommentNotFoundException;
 use Grimarina\Blog_Project\Blog\Repositories\CommentsRepositories\CommentsRepository;
 use Grimarina\Blog_Project\Blog\UUID;
 use Grimarina\Blog_Project\Blog\Comment;
+use Grimarina\Blog_Project\UnitTests\DummyLogger;
 use PDO;
 use PDOStatement;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +31,7 @@ class CommentsRepositoryTest extends TestCase
 
         $connectionStub->method('prepare')->willReturn($statementMock);
 
-        $repository = new CommentsRepository($connectionStub);
+        $repository = new CommentsRepository($connectionStub, new DummyLogger());
 
         $repository->save(new Comment(
             new UUID('f440d768-3a0f-41fd-bafc-ed38c16252bc'),
@@ -50,7 +51,7 @@ class CommentsRepositoryTest extends TestCase
         $connectionMock->method('prepare')->willReturn($statementStub);
 
     
-        $repository = new CommentsRepository($connectionMock);
+        $repository = new CommentsRepository($connectionMock, new DummyLogger());
         $this->expectException(CommentNotFoundException::class);
         $this->expectExceptionMessage('Cannot find comment: f440d768-3a0f-41fd-bafc-ed38c16252bc');
 

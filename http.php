@@ -6,6 +6,7 @@ use Grimarina\Blog_Project\http\Actions\Comments\{CreateComment, FindCommentByUu
 use Grimarina\Blog_Project\http\Actions\Likes\{CreateLike, FindByPostUuid};
 use Grimarina\Blog_Project\http\{ErrorResponse, Request};
 use Grimarina\Blog_Project\Exceptions\HttpException;
+use Grimarina\Blog_Project\http\Actions\Auth\{LogIn, LogOut};
 use Psr\Log\LoggerInterface;
 
 $container = require __DIR__ . '/bootstrap.php';
@@ -42,6 +43,8 @@ $routes = [
         '/likes/show' => FindByPostUuid::class,
         ],
     'POST' => [
+        '/login' => LogIn::class,
+        '/logout' => LogOut::class,
         '/users/create' => CreateUser::class,
         '/posts/create' => CreatePost::class,
         '/comments/create' => CreateComment::class,

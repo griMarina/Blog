@@ -24,16 +24,18 @@ class UsersRepositoryTest extends TestCase
         ->with([
             ':uuid' => '123e4567-e89b-12d3-a456-426614174000', 
             ':username' => 'ivan123',
+            ':password' => 'ivan123',
             ':firstname' => 'Ivan',
             ':lastname' => 'Nikitin',
         ]);
 
         $connectionStub->method('prepare')->willReturn($statementMock);
 
-        $repository = new UsersRepository($connectionStub);
+        $repository = new UsersRepository($connectionStub, new DummyLogger);
 
         $repository->save(new User(
             new UUID('123e4567-e89b-12d3-a456-426614174000'),
+            'ivan123',
             'ivan123',
             'Ivan',
             'Nikitin'
@@ -50,7 +52,7 @@ class UsersRepositoryTest extends TestCase
         $connectionMock->method('prepare')->willReturn($statementStub);
 
     
-        $repository = new UsersRepository($connectionMock);
+        $repository = new UsersRepository($connectionMock, new DummyLogger);
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('Cannot find user: ivan123');
 

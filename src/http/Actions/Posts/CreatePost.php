@@ -4,23 +4,29 @@ namespace Grimarina\Blog_Project\http\Actions\Posts;
 
 use Grimarina\Blog_Project\Blog\Repositories\PostsRepositories\PostsRepositoryInterface;
 use Grimarina\Blog_Project\Blog\{Post, UUID};
+use Grimarina\Blog_Project\Exceptions\AuthException;
 use Grimarina\Blog_Project\Exceptions\HttpException;
 use Grimarina\Blog_Project\http\Actions\ActionInterface;
 use Grimarina\Blog_Project\http\{ErrorResponse, Request, Response, SuccessfulResponse};
-use Grimarina\Blog_Project\http\Auth\IdentificationInterface;
+use Grimarina\Blog_Project\http\Auth\TokenAuthenticationInterface;
 
 class CreatePost implements ActionInterface 
 {
     public function __construct(
         private PostsRepositoryInterface $postsRepository,
-        private IdentificationInterface $identification,
+        private TokenAuthenticationInterface $authentication,
     )
     {
     }
 
     public function handle(Request $request): Response
     {
-        $author = $this->identification->user($request);
+
+        try {
+            $author = $this->authentication->user($request); 
+        } catch (AuthException $error) {
+            return new ErrorResponse($error->getMessage()); 
+        }
 
         $newPostUuid = UUID::random();
 

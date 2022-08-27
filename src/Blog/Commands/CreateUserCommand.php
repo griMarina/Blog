@@ -22,18 +22,20 @@ class CreateUserCommand
         $this->logger->info("Create user command started");
 
         $username = $arguments->get('username');
-
+       
         if ($this->userExists($username)) {
             $this->logger->warning("User: $username already exists");
             return;                
         }
 
-        $this->usersRepository->save(new User(
-            UUID::random(),
+        $user = User::createFrom(
             $username,
+            $arguments->get('password'),
             $arguments->get('firstname'),
             $arguments->get('lastname'),
-        ));
+        );
+       
+        $this->usersRepository->save($user);
 
         $this->logger->info("User created: $username");
     }
