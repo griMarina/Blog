@@ -3,7 +3,7 @@
 namespace Grimarina\Blog_Project\Blog\Repositories\PostsRepositories;
 
 use Grimarina\Blog_Project\Blog\{Post, UUID};
-use Grimarina\Blog_Project\Exceptions\PostNotFoundException;
+use Grimarina\Blog_Project\Exceptions\{PostNotFoundException, PostsRepositoryException};
 use Psr\Log\LoggerInterface;
 
 class PostsRepository implements PostsRepositoryInterface
@@ -62,10 +62,15 @@ class PostsRepository implements PostsRepositoryInterface
 
     public function delete(UUID $uuid): void
     {
-        $statement = $this->connection->prepare('DELETE FROM posts WHERE uuid = :uuid');
+        try {
+            $statement = $this->connection->prepare('DELETE FROM posts WHERE uuid = :uuid');
 
-        $statement->execute([
-            'uuid' => (string)$uuid,
-        ]);
+            $statement->execute([
+                'uuid' => (string)$uuid,
+            ]);
+        } catch (\PDOException $error) {
+            throw new PostsRepositoryException($error->getMessage());
+        }
+        
     }
 }
