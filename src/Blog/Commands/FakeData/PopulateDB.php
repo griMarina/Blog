@@ -55,7 +55,7 @@ class PopulateDB extends Command
         $usersNum = $input->getOption('users-number') ?? 10;
 
         $users = [];
-        for ($i = 0; $i < $usersNum & $i < 100; $i++) {
+        for ($i = 0; $i < $usersNum; $i++) {
             $user = $this->createFakeUser();
             $users[] = $user;
             $output->writeln('User created: ' . $user->getUsername());
@@ -65,7 +65,7 @@ class PopulateDB extends Command
 
         $posts = [];
         foreach ($users as $user) {
-            for ($i = 0; $i < $postsNum & $i < 50; $i++) {
+            for ($i = 0; $i < $postsNum; $i++) {
                 $post = $this->createFakePost($user); 
                 $posts[] = $post;
                 $output->writeln('Post created: ' . $post->getTitle()); 
@@ -75,7 +75,7 @@ class PopulateDB extends Command
         $commentsNum = $input->getOption('comments-number') ?? 1;
 
         foreach ($posts as $post) {
-            for ($i = 0; $i < $commentsNum & $i < 50; $i++) {
+            for ($i = 0; $i < $commentsNum; $i++) {
                 $comment = $this->createFakeComment($post);
                 $output->writeln('Comment created: ' . $comment->getUuid());
             }
