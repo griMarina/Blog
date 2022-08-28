@@ -12,10 +12,11 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Dotenv\Dotenv;
 use Faker\Generator;
+use Faker\Provider\en_GB\Internet;
+use Faker\Provider\en_GB\Person;
+use Faker\Provider\en_US\Text;
 use Faker\Provider\Lorem;
-use Faker\Provider\ru_RU\Internet;
-use Faker\Provider\ru_RU\Person;
-use Faker\Provider\ru_RU\Text;
+
 
 require_once __DIR__ . "/vendor/autoload.php";
 

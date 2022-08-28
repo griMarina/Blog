@@ -9,6 +9,7 @@ use Grimarina\Blog_Project\Blog\User;
 use Grimarina\Blog_Project\Blog\UUID;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PopulateDB extends Command
@@ -25,7 +26,19 @@ class PopulateDB extends Command
     {
         $this
             ->setName('fake-data:populate-db') 
-            ->setDescription('Populates DB with fake data');
+            ->setDescription('Populates DB with fake data')
+            ->addOption(
+                'users-number',
+                'u',
+                InputOption::VALUE_OPTIONAL,
+                'Users number'
+            )
+            ->addOption(
+                'posts-number',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Posts number'
+            );
     }
     
     protected function execute( 
@@ -33,15 +46,19 @@ class PopulateDB extends Command
         OutputInterface $output,
     ): int 
     {
+        $usersNum = $input->getOption('users-number') ?? 10;
+
         $users = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < $usersNum & $i < 100; $i++) {
             $user = $this->createFakeUser();
             $users[] = $user;
             $output->writeln('User created: ' . $user->getUsername());
         }
         
+        $postsNum = $input->getOption('posts-number') ?? 10;
+
         foreach ($users as $user) {
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < $postsNum & $i < 50; $i++) {
                 $post = $this->createFakePost($user); 
                 $output->writeln('Post created: ' . $post->getTitle()); 
             }
