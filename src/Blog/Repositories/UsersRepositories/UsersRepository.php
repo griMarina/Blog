@@ -18,7 +18,14 @@ class UsersRepository implements UsersRepositoryInterface
     public function save(User $user): void
     {
 
-        $statement = $this->connection->prepare('INSERT INTO users (uuid, username, password, firstname, lastname) VALUES (:uuid, :username, :password, :firstname, :lastname)');
+        $statement = $this->connection->prepare(
+            'INSERT INTO users 
+                (uuid, username, password, firstname, lastname) 
+            VALUES (:uuid, :username, :password, :firstname, :lastname)
+            ON CONFLICT (uuid) DO UPDATE SET
+                firstname = :firstname,
+                lastname = :lastname'
+        );
 
         $statement->execute([
             ':uuid' => (string)$user->getUuid(),

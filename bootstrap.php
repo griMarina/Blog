@@ -11,6 +11,12 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Dotenv\Dotenv;
+use Faker\Generator;
+use Faker\Provider\en_GB\Internet;
+use Faker\Provider\en_GB\Person;
+use Faker\Provider\en_US\Text;
+use Faker\Provider\Lorem;
+
 
 require_once __DIR__ . "/vendor/autoload.php";
 
@@ -92,6 +98,18 @@ $container->bind(
 $container->bind( 
     TokenAuthenticationInterface::class, 
     BearerTokenAuthentication::class
+);
+
+$faker = new Generator();
+
+$faker->addProvider(new Person($faker));
+$faker->addProvider(new Text($faker));
+$faker->addProvider(new Internet($faker));
+$faker->addProvider(new Lorem($faker));
+
+$container->bind(
+    Generator::class,
+    $faker
 );
 
 return $container;
