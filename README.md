@@ -2,7 +2,7 @@ This API for a Blog is the final project of the course Advanced PHP, GeekBrains 
 
 ## General info
 
-The application hasn't any fronted and it returns only JSON responses via HTTP. The app has users and they are able to write articles and comments.
+The application hasn't any fronted and it returns only JSON responses via HTTP. The app has users and they can write articles and comments.
 
 ## Technologies:
 * Php
