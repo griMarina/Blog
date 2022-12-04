@@ -7,6 +7,3 @@ The application hasn't any fronted and it returns only JSON responses via HTTP. 
 ## Technologies:
 * Php
 * SQLite
-
-## Setup
-
